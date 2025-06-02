@@ -2,6 +2,7 @@ import requests
 import allure
 import pytest
 from data import DataUser
+from data import Answers
 from url import Urls
 from random_data_user import generate_random_string
 
@@ -22,7 +23,7 @@ class TestLoginCourier:
     ])
     def test_courier_login_with_random_fields_data(self, random_fields):
         response = requests.post(Urls.URL_login_courier, data=random_fields)
-        assert response.status_code == 404 and response.json() == {'code': 404, 'message': 'Учетная запись не найдена'}
+        assert response.status_code == 404 and response.json() == Answers.asnw404
 
     @allure.title('Неуспешная авторизация при вводе не всех обязательных полей')
     @allure.description('Проверка статус-кода и тела ответа')
@@ -33,4 +34,4 @@ class TestLoginCourier:
     ])
     def test_courier_login_with_empty_fields(self, empty_fields):
         response = requests.post(Urls.URL_login_courier, data=empty_fields)
-        assert response.status_code == 400 and response.json() == {'code': 400, 'message': 'Недостаточно данных для входа'}
+        assert response.status_code == 400 and response.json() == Answers.answ400

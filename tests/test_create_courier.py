@@ -2,6 +2,7 @@ import requests
 import allure
 import pytest
 from data import DataUser
+from data import Answers
 from url import Urls
 from random_data_user import generate_random_string
 
@@ -18,7 +19,7 @@ class TestCreateCourier:
         }
         response = requests.post(Urls.URL_create_courier, data=payload)
         assert response.status_code == 201
-        assert response.json() == {'ok': True}
+        assert response.json() == Answers.answ201
         response_login = requests.post(Urls.URL_login_courier, data=payload)
         assert requests.delete(f"{Urls.URL_delete_courier}/{response_login.json()['id']}")
 
@@ -32,7 +33,7 @@ class TestCreateCourier:
         }
         response = requests.post(Urls.URL_create_courier, data=payload)
         assert response.status_code == 409
-        assert response.json() == {'code': 409, 'message': 'Этот логин уже используется. Попробуйте другой.'}
+        assert response.json() == Answers.answ409
 
     @allure.title('Создание курьера без заполнения обязательных полей')
     @allure.description('Проверка статус-кода и тела ответа')
@@ -45,4 +46,4 @@ class TestCreateCourier:
     ])
     def test_create_courier_with_empty_fields(self, empty_fields):
         response = requests.post(Urls.URL_create_courier, data=empty_fields)
-        assert response.status_code == 400 and response.json() == {'code': 400, 'message': 'Недостаточно данных для создания учетной записи'}
+        assert response.status_code == 400 and response.json() == Answers.answ400empty
